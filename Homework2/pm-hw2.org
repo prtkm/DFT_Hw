@@ -152,6 +152,6 @@ write('CH3NO2.png',atoms,show_unit_cell=2)
 
 [[./CH3NO2.png]]
 
-* Chapter 2 of dft-book
+* Chapter 9 of dft-book
 
 See attached.
