@@ -1,0 +1,157 @@
+
+* Properties of Nitromethane
+
+** Molecular Weight
+
+#+begin_src python
+from ase.data.molecules import molecule
+from ase import Atoms, Atom
+from ase.io import write
+
+atoms1 = molecule('CH3NO2')
+atoms2= Atoms([Atom('C'),Atom('H'),Atom('H'),Atom('H'),Atom('N'), Atom('O'), Atom('O')])
+
+masses1 = atoms1.get_masses()
+masses2 =atoms2.get_masses()
+molecular_weight1 = masses1.sum()
+molecular_weight2 = masses2.sum()
+
+print 'The molecular weight of nitromehtane computed by ase is {0} gm/mol'.format(molecular_weight1)
+print 'The molecular weight of nitromethane computed by hand is {0} gm/mol'.format(molecular_weight2)
+#+end_src
+
+
+#+RESULTS:
+: The molecular weight of nitromehtane computed by ase is 61.04032 gm/mol
+: The molecular weight of nitromethane computed by hand is 61.04032 gm/mol
+
+
+** Center of Mass
+
+#+begin_src python
+
+
+
+from ase.structure import molecule
+from ase.io import write
+import numpy as np
+
+def fn_com(atoms):
+    pos= atoms.positions
+    masses=atoms.get_masses()
+    COM = np.array([0., 0.,0.])
+
+    for m,p in zip(masses, pos):
+        COM +=m*p
+    COM /=masses.sum()
+    return COM
+
+atoms= molecule('CH3NO2')
+COM1= fn_com(atoms)
+
+print 'COM1={0}'.format(COM1)
+print 'COM2={0}'.format(atoms.get_center_of_mass())
+
+#+end_src
+
+#+RESULTS:
+: COM1=[ 0.00619103  0.07988693  0.        ]
+: COM2=[ 0.00619103  0.07988693  0.        ]
+
+** Moments of Inertia
+
+#+begin_src python
+
+from ase.structure import molecule
+
+atoms=molecule('CH3NO2')
+molecular_formula=atoms.get_chemical_symbols(reduce=True)
+print 'The Moments of Inertia for {0} are {1}'.format(molecular_formula, atoms.get_moments_of_inertia())
+#+end_src
+
+#+RESULTS:
+: The Moments of Inertia for CNH3O2 are [ 42.24164093  47.83785675  86.86751504]
+
+** Bond Lengths
+
+#+begin_src python
+
+from ase.structure import molecule
+from ase.io import write
+
+atoms= molecule('CH3NO2')
+print 'atom symbol'
+print '-----------'
+for i,atom in enumerate(atoms):
+    print '{0} {1}'.format(i,atom.symbol)
+
+s='The C-H bond lengths are {0:1.3f},{1:1.3f}, and {2:1.3f} Angstroms'
+print s.format(atoms.get_distance(0,2),atoms.get_distance(0,3),atoms.get_distance(0,4))
+
+#+end_src
+
+
+#+RESULTS:
+#+begin_example
+atom symbol
+-----------
+0 C
+1 N
+2 H
+3 H
+4 H
+5 O
+6 O
+The C-H bond lengths are 1.090,1.087, and 1.087 Angstroms
+#+end_example
+
+
+** Bond angle in the nitro group
+
+#+begin_src python
+from ase.structure import molecule
+from numpy import pi
+
+atoms= molecule('CH3NO2')
+print 'The O-N-O bond angle is {0:1.3F} degrees'.format(atoms.get_angle([5,4,6])*180/pi)
+
+#+end_src
+
+#+RESULTS:
+: The O-N-O bond angle is 44.117 degrees
+
+** Generate an xyz file
+
+#+begin_src python
+from ase.io import read,write
+from ase.data.molecules import molecule
+
+atoms= molecule('CH3NO2')
+
+write('CH3NO2.xyz', atoms)
+
+#+end_src
+
+#+RESULTS:
+
+** Create a graphic of Nitromethane
+
+
+#+begin_src python
+from ase.structure import molecule
+from ase.io import write
+atoms= molecule('CH3NO2', cell=(10,11.5,12.1))
+
+atoms.center()
+write('CH3NO2.png',atoms,show_unit_cell=2)
+
+#+end_src
+
+#+RESULTS:
+
+
+[[./CH3NO2.png]]
+
+* Chapter 2 of dft-book
+
+See attached.
